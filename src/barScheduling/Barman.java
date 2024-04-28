@@ -32,16 +32,7 @@ public class Barman extends Thread {
 		else if (order1.getExecutionTime() < order2.getExecutionTime()) {
 			return -1;
 		}
-		else {
-			// If same size order, compare orderer id
-			if (order1.orderer > order2.orderer) {
-				return 1;
-			}
-			else if (order1.orderer < order2.orderer) {
-				return -1;
-			}
-		}
-        return 0;
+        return 1; //if equal any order would do, take order1
     }
 	}
 
@@ -52,8 +43,8 @@ public class Barman extends Thread {
 			this.orderQueue = new LinkedBlockingQueue<>();
 		//FIX below
 		//Changed to use Priority blocking queue to compare the execution time of the orders
-		//Used lambda function to get executiontime of drinkorder
-		else this.orderQueue = new PriorityBlockingQueue <DrinkOrder> (11, new COMPARING()); //this just does the same thing 
+		// 
+		else this.orderQueue = new PriorityBlockingQueue <DrinkOrder> (11, new COMPARING()); //this just does the same thing
 		
 	    this.startSignal=startSignal;
 	}
@@ -61,6 +52,7 @@ public class Barman extends Thread {
 	
 	public void placeDrinkOrder(DrinkOrder order) throws InterruptedException {
         orderQueue.put(order);
+
     }
 	
 	
@@ -72,7 +64,9 @@ public class Barman extends Thread {
 			startSignal.await(); //check latch - don't start until told to do so
 
 			while(true) {
+				System.out.println(orderQueue);
 				nextOrder=orderQueue.take();
+				System.out.println(orderQueue);
 				System.out.println("---Barman preparing order for patron "+ nextOrder.toString());
 				sleep(nextOrder.getExecutionTime()); //processing order
 				System.out.println("---Barman has made order for patron "+ nextOrder.toString());
