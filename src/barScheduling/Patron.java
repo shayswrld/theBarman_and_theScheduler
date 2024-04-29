@@ -21,11 +21,11 @@ public class Patron extends Thread {
 	private int ID; //thread ID 
 	private int lengthOfOrder;
 	private long startTime, endTime; //for all the metrics
-	
 	public static FileWriter fileW;
 
 
 	private DrinkOrder [] drinksOrder;
+	private int orderSize; //Added for getting size of entire order for Patron
 	
 	Patron( int ID,  CountDownLatch startSignal, Barman aBarman) {
 		this.ID=ID;
@@ -33,6 +33,7 @@ public class Patron extends Thread {
 		this.theBarman=aBarman;
 		this.lengthOfOrder=random.nextInt(5)+1;//between 1 and 5 drinks
 		drinksOrder=new DrinkOrder[lengthOfOrder];
+		orderSize = 0;
 	}
 	
 	public  void writeToFile(String data) throws IOException {
@@ -53,13 +54,15 @@ public class Patron extends Thread {
 			System.out.println("thirsty Patron "+ this.ID +" arrived");
 			//END do not change
 			
+			
+			
 	        //create drinks order
 	        for(int i=0;i<lengthOfOrder;i++) {
 	        	drinksOrder[i]=new DrinkOrder(this.ID);
-	        	
+	        	orderSize += drinksOrder[i].getExecutionTime(); //add the preparation time of each drink to the order size
 	        }
 			System.out.println("Patron "+ this.ID + " submitting order of " + lengthOfOrder +" drinks"); //output in standard format  - do not change this
-	        startTime = System.currentTimeMillis();//started placing orders
+	        startTime = System.currentTimeMillis(); //started placing orders
 			for(int i=0;i<lengthOfOrder;i++) {
 				System.out.println("Order placed by " + drinksOrder[i].toString());
 				theBarman.placeDrinkOrder(drinksOrder[i]);
@@ -71,7 +74,7 @@ public class Patron extends Thread {
 			endTime = System.currentTimeMillis();
 			long totalTime = endTime - startTime;
 			
-			writeToFile( String.format("%d,%d,%d\n",ID,arrivalTime,totalTime));
+			writeToFile( String.format("%d,%d,%d,%d\n",ID,arrivalTime,totalTime,orderSize)); //Added written ordersize
 			System.out.println("Patron "+ this.ID + " got order in " + totalTime);
 			
 			

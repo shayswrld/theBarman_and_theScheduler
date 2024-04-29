@@ -43,8 +43,8 @@ public class Barman extends Thread {
 			this.orderQueue = new LinkedBlockingQueue<>();
 		//FIX below
 		//Changed to use Priority blocking queue to compare the execution time of the orders
-		// 
-		else this.orderQueue = new PriorityBlockingQueue <DrinkOrder> (11, new COMPARING()); //this just does the same thing
+		// Implementation of non-preemptive Shortest Job First
+		else this.orderQueue = new PriorityBlockingQueue <> (11, new COMPARING()); //this just does the same thing**
 		
 	    this.startSignal=startSignal;
 	}

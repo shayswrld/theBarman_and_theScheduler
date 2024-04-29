@@ -35,10 +35,10 @@ public class SchedulingSimulation {
 			noPatrons=Integer.parseInt(args[0]);  //total people to enter room
 		} else if (args.length==2) {
 			noPatrons=Integer.parseInt(args[0]);  //total people to enter room
-			sched=Integer.parseInt(args[1]); 
+			sched=Integer.parseInt(args[1]); //scheduling algorithm
 		}
 		
-		writer = new FileWriter("turnaround_time_"+Integer.toString(sched)+".txt", false);
+		writer = new FileWriter("turnaround_time_"+Integer.toString(noPatrons) + "_" + Integer.toString(sched)+".txt", false);
 		Patron.fileW=writer;
 
 		startSignal= new CountDownLatch(noPatrons+2);//Barman and patrons and main method must be ready
