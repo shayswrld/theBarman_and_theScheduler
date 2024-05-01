@@ -12,7 +12,7 @@ import java.util.concurrent.CountDownLatch;
 public class SchedulingSimulation {
 	static int noPatrons=100; //number of customers - default value if not provided on command line
 	static int sched=0; //which scheduling algorithm, 0= FCFS
-			
+	private static long totalLengthStart, totalLengthEnd, totalLength; //for all the metrics
 	static CountDownLatch startSignal;
 
 	
@@ -20,7 +20,7 @@ public class SchedulingSimulation {
 	static Barman Andre;
 	static FileWriter writer;
 
-	public  void writeToFile(String data) throws IOException {
+	public static void writeToFile(String data) throws IOException {
 	    synchronized (writer) {
 	    	writer.write(data);
 	    }
@@ -28,8 +28,6 @@ public class SchedulingSimulation {
 
 	public static void main(String[] args) throws InterruptedException, IOException {
 		
-		
-
 		//deal with command line arguments if provided
 		if (args.length==1) {
 			noPatrons=Integer.parseInt(args[0]);  //total people to enter room
@@ -63,6 +61,7 @@ public class SchedulingSimulation {
       	for (int i=0;i<noPatrons;i++) {
 			patrons[i].join();
 		}
+
 
     	System.out.println("------Waiting for Andre------");
     	Andre.interrupt();   //tell Andre to close up

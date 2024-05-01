@@ -77,10 +77,12 @@ public class DrinkOrder  {
     }
     
     //patrons wait for their orders
-    public synchronized void waitForOrder() throws InterruptedException {
+    //returns time taken for the order
+    public synchronized long waitForOrder(long orderStart) throws InterruptedException {
     	while(!orderComplete.get()) {
     		this.wait();
     	}
+        return System.currentTimeMillis() - orderStart; //Order completed - return time taken
     }
     
     @Override
