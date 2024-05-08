@@ -83,7 +83,8 @@ public class DrinkOrder  {
     	while(!orderComplete.get()) {
     		this.wait();
     	}
-        return System.currentTimeMillis() - orderStart; //Order completed - return time taken
+        long timeToDrink = System.currentTimeMillis() - orderStart;
+        return timeToDrink; //Order completed - return time taken
     }
     
     @Override

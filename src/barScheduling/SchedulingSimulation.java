@@ -36,7 +36,7 @@ public class SchedulingSimulation {
 			sched=Integer.parseInt(args[1]); //scheduling algorithm
 		}
 		
-		writer = new FileWriter("turnaround_time_"+Integer.toString(noPatrons) + "_" + Integer.toString(sched)+".txt", false);
+		writer = new FileWriter("sjf/turnaround_time_"+Integer.toString(noPatrons) + "_" + Integer.toString(sched)+".txt", false);
 		Patron.fileW=writer;
 
 		startSignal= new CountDownLatch(noPatrons+2);//Barman and patrons and main method must be ready

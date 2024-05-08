@@ -77,15 +77,12 @@ public class Barman extends Thread {
 			totalLengthStart = System.currentTimeMillis();
 
 			while(true) {
-				System.out.println(orderQueue);
 				nextOrder=orderQueue.take();
-
 				System.out.println("---Barman preparing order for patron "+ nextOrder.toString());
 				sleep(nextOrder.getExecutionTime()); //processing order
 				System.out.println("---Barman has made order for patron "+ nextOrder.toString());
 				nextOrder.orderDone();
 				drinksServed += 1;
-				System.out.println("---Barman has served "+ drinksServed + " drinks");
 			}
 			
 
@@ -94,10 +91,12 @@ public class Barman extends Thread {
 		} catch (InterruptedException e1) {
 			System.out.println("---Barman is packing up ");
 			totalLengthEnd = System.currentTimeMillis();
-			System.out.println("---Barman has served "+ drinksServed + " drinks in " + (totalLengthEnd - totalLengthStart) + " milliseconds");
-			double throughput = (drinksServed/((totalLengthEnd - totalLengthStart)/(1000))); //throughput - milliseconds / 1000 = seconds 
-			System.out.println("---Barman has served "+ throughput + " drinks in 1 second");
-			writeToFile(String.format(",,,,,%d", throughput)); //Write drinks served per minute in 6th column
+			float timeTaken = (float) (totalLengthEnd - totalLengthStart);
+			System.out.println("---Barman has served "+ drinksServed + " drinks in " + (timeTaken) + " milliseconds");
+			// patrons served per millisecond * 1000 => throughput per second * 60 => throughput per minute
+			float throughput = (float) SchedulingSimulation.noPatrons / ((timeTaken) / 1000); // Perform division using floating-point arithmetic
+			System.out.println("---Barman serves "+ Float.toString(throughput) + " patrons per minute");
+			writeToFile(",,,,," + throughput); // Write drinks served per minute in 6th column
 		}
 	}
 }

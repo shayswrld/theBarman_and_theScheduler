@@ -66,21 +66,21 @@ public class Patron extends Thread {
 				System.out.println("Order placed by " + drinksOrder[i].toString());
 				theBarman.placeDrinkOrder(drinksOrder[i]);
 			}
-			orderEnd = System.currentTimeMillis(); //Start timer for each drink at start of order
 			
 
 			for(int i=0;i<lengthOfOrder;i++) {
 				// Find order with lowest time taken to get response
-				long orderTime = drinksOrder[i].waitForOrder(orderEnd); // How long did this order take to complete
+				long orderTime = drinksOrder[i].waitForOrder(startTime); // How long did this order take to complete
 				waitingTime += orderTime - drinksOrder[i].getExecutionTime(); // Waiting time is time bartender spends not working on drink 
 				if (orderTime < responseTime) { 
-					responseTime = drinksOrder[i].waitForOrder(orderEnd); // Update response time - shortest time taken to get drink
+					responseTime = orderTime; // Update response time - shortest time taken to get drink
 				}
 			}
 
 			long turnaroundTime = System.currentTimeMillis() - startTime; //Changed from totalTime -> turnaround time
-			writeToFile( String.format("%d,%d,%d,%d,%d\n",ID,arrivalTime,turnaroundTime, responseTime, waitingTime)); //Write instrumentation
-			System.out.println("Patron "+ this.ID + " got order in " + turnaroundTime);
+			System.out.println(String.format("%d,%d,%d,%d,%d\n",ID,arrivalTime,turnaroundTime, responseTime, waitingTime));
+			writeToFile( String.format("%d,%d,%d,%d,%d,\n",ID,arrivalTime,turnaroundTime, responseTime, waitingTime)); //Write instrumentation
+			System.out.println("Patron "+ this.ID + " got order in " + turnaroundTime + "\n");
 			
 			
 		} catch (InterruptedException e1) {  //do nothing
