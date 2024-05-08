@@ -60,6 +60,7 @@ public class DrinkOrder  {
     }
     
     public static Drink getRandomDrink() {
+
         Drink[] drinks = Drink.values();  // Get all enum constants
         int randomIndex = random.nextInt(drinks.length);  // Generate a random index
         return drinks[randomIndex];  // Return the randomly selected drink

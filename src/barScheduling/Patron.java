@@ -74,7 +74,7 @@ public class Patron extends Thread {
 				long orderTime = drinksOrder[i].waitForOrder(orderEnd); // How long did this order take to complete
 				waitingTime += orderTime - drinksOrder[i].getExecutionTime(); // Waiting time is time bartender spends not working on drink 
 				if (orderTime < responseTime) { 
-					responseTime = drinksOrder[i].waitForOrder(orderEnd); // Update response time
+					responseTime = drinksOrder[i].waitForOrder(orderEnd); // Update response time - shortest time taken to get drink
 				}
 			}
 

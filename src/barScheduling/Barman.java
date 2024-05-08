@@ -95,7 +95,7 @@ public class Barman extends Thread {
 			System.out.println("---Barman is packing up ");
 			totalLengthEnd = System.currentTimeMillis();
 			System.out.println("---Barman has served "+ drinksServed + " drinks in " + (totalLengthEnd - totalLengthStart) + " milliseconds");
-			long throughput = (drinksServed/((totalLengthEnd - totalLengthStart)/(1000))); //throughput - milliseconds / 1000 = seconds 
+			double throughput = (drinksServed/((totalLengthEnd - totalLengthStart)/(1000))); //throughput - milliseconds / 1000 = seconds 
 			System.out.println("---Barman has served "+ throughput + " drinks in 1 second");
 			writeToFile(String.format(",,,,,%d", throughput)); //Write drinks served per minute in 6th column
 		}
