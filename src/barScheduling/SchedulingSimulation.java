@@ -10,12 +10,10 @@ import java.util.concurrent.CountDownLatch;
 
 
 public class SchedulingSimulation {
-	static int noPatrons=5; //number of customers - default value if not provided on command line
-	static int sched=1; //which scheduling algorithm, 0= FCFS
-	static int trial=1; //number of trials
+	static int noPatrons=100; //number of customers - default value if not provided on command line
+	static int sched=0; //which scheduling algorithm, 0= FCFS
 	private static long totalLengthStart, totalLengthEnd, totalLength; //for all the metrics
 	static CountDownLatch startSignal;
-
 	
 	static Patron[] patrons; // array for customer threads
 	static Barman Andre;
@@ -35,13 +33,8 @@ public class SchedulingSimulation {
 		} else if (args.length==2) {
 			noPatrons=Integer.parseInt(args[0]);  //total people to enter room
 			sched=Integer.parseInt(args[1]); //scheduling algorithm
-		} else {
-			noPatrons=Integer.parseInt(args[0]);  //total people to enter room
-			sched=Integer.parseInt(args[1]); //scheduling algorithm
-			trial = Integer.parseInt(args[2]); //number of trial			
 		}
-		
-		writer = new FileWriter("fcfs2/turnaround_time_"+Integer.toString(noPatrons) + "_" + Integer.toString(sched)+ "_"+ Integer.toString(trial) + ".txt", false);
+		writer = new FileWriter("turnaround_time_"+Integer.toString(noPatrons) + "_" + Integer.toString(sched) + ".txt", false);
 		Patron.fileW=writer;
 
 		startSignal= new CountDownLatch(noPatrons+2);//Barman and patrons and main method must be ready

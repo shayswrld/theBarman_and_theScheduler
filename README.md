@@ -17,8 +17,13 @@ a typical scheduler - processes scenario.
     1) Ensure you are in the directory containing the makefile, src and bin folders.
     2) terminal command: make run ARGS="$no.Patrons $SchedulerAlgorithm"
         - no.Patrons -> the number of patrons in the program
-        - SchedulerAlgorithm -> 0 = First Come First Serve, 1 = Shortest Job First
+        - SchedulerAlgorithm -> 
+            0 = First Come First Serve 
+            1 = Shortest Job First
+            2 = Round Robin with time quantum 100
+            3 = R.R with time quantum 90
+            4 = R.R with time quantum 120
     3) Data will be written to the same directory as makefile with Patron ID, arrivalTime, turnaroundTime,  responseTime, waitingTime and Throughput
     4) Throughtput will be measured in Patrons Served per second
-
+    
     

@@ -26,11 +26,13 @@ public class DrinkOrder  {
     	
         private final String name;
         private final int preparationTime; // in minutes
-        
+        private int remainingPreparationTime; //Added for round robin since prep time can't be changed
+
 
         Drink(String name, int preparationTime) {
             this.name = name;
             this.preparationTime = preparationTime;
+            this.remainingPreparationTime = preparationTime;
         }
 
         public String getName() {
@@ -39,6 +41,15 @@ public class DrinkOrder  {
 
         public int getPreparationTime() {
             return preparationTime;
+        }
+        //Added for round robin
+        public int getRemainingPreparationTime() {
+            return remainingPreparationTime;
+        }
+
+        //Added for round robin
+        public void setRemainingPreparationTime(int remainingPreparationTime) {
+            this.remainingPreparationTime = remainingPreparationTime;
         }
 
         @Override
@@ -71,6 +82,19 @@ public class DrinkOrder  {
     public int getExecutionTime() {
         return drink.getPreparationTime();
     }
+    //Added for round robin
+    public int getRemainingExecutionTime() {
+        return drink.getRemainingPreparationTime();
+    }
+    //Added for round robin 
+    public void setExecutionTime(int executionTime) {
+        drink.setRemainingPreparationTime(executionTime);
+    }
+
+    public int getOrderer() {
+        // Method added to determine who ordered the drink
+        return orderer;
+    }
 
     public long getTimeDone() {
         return this.timeDone;
@@ -94,6 +118,6 @@ public class DrinkOrder  {
     
     @Override
     public String toString() {
-        return Integer.toString(orderer) +": "+ drink.getName();
+        return Integer.toString(orderer) +": "+ drink.getName()+ " (" +Integer.toString(drink.getRemainingPreparationTime())+ ")";
     }
 }

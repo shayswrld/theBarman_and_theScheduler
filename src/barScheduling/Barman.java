@@ -6,6 +6,8 @@ import java.util.concurrent.atomic.AtomicBoolean;
 import javax.lang.model.element.ModuleElement.DirectiveKind;
 
 import java.util.Comparator;
+import barScheduling.DrinkOrder.Drink;
+import barScheduling.DrinkOrder;
 import java.util.concurrent.BlockingQueue;
 import java.util.concurrent.CountDownLatch;
 import java.util.concurrent.LinkedBlockingQueue;
@@ -25,6 +27,8 @@ public class Barman extends Thread {
 	private BlockingQueue<DrinkOrder> orderQueue;
 	public int drinksServed;
 	private static long totalLengthStart, totalLengthEnd, totalLength; //for all the metrics
+	private int schedAlg;
+	private int q;
 
 	// Comparator to compare Drink Orders
 	class COMPARING implements Comparator<DrinkOrder> {
@@ -41,15 +45,17 @@ public class Barman extends Thread {
 
 	Barman(  CountDownLatch startSignal,int schedAlg) {
 		drinksServed = 0;
-		if (schedAlg==0)
-			this.orderQueue = new LinkedBlockingQueue<>();
+		if (schedAlg==0 || schedAlg==2 || schedAlg==3 || schedAlg==4)
+			{this.orderQueue = new LinkedBlockingQueue<>();}
 		//FIX below
 		//Changed to use Priority blocking queue to compare the execution time of the orders
 		// Implementation of non-preemptive Shortest Job First
 		else this.orderQueue = new PriorityBlockingQueue <DrinkOrder> (11, new COMPARING()); //this just does the same thing**
 		
 	    this.startSignal=startSignal;
-		this.drinksServed = 0;
+		this.schedAlg = schedAlg; //Changed to use RR if arg = 2
+		this.drinksServed = 0; // Added to count drinks for throughput calculation
+		this.q = 90; // Set time quantum to 80ms
 	}
 
 	public void writeToFile(String data) {
@@ -74,9 +80,25 @@ public class Barman extends Thread {
 			startSignal.countDown(); //barman ready
 			startSignal.await(); //check latch - don't start until told to do so
 			totalLengthStart = System.currentTimeMillis();
+			int processTime = 0; //Added for round Robin
 
 			while(true) {
 				nextOrder=orderQueue.take();
+
+				// Added for Round Robin, check if we are serving the next Patron
+				if (schedAlg == 2 || schedAlg == 3 || schedAlg == 4) {
+					processTime = nextOrder.getRemainingExecutionTime();
+					if (processTime > q) { //Drink takes longer than time quantum
+						System.out.println("---Barman preparing **PART** order for patron "+ nextOrder.toString());
+						sleep(q); //processing order - will always sleep q if drink takes longer than q
+						nextOrder.setExecutionTime(processTime - q); // Set remaining time to process
+						orderQueue.put(nextOrder); // Put the drink back in the queue
+						System.out.println("---Barman has sent order for "+ nextOrder.toString() + " to the back of the queue");
+						continue; // Continue to next iteration
+					}
+				}
+
+				//BELOW THE SAME AS BEFORE
 				System.out.println("---Barman preparing order for patron "+ nextOrder.toString());
 				sleep(nextOrder.getExecutionTime()); //processing order
 				System.out.println("---Barman has made order for patron "+ nextOrder.toString());
@@ -93,7 +115,7 @@ public class Barman extends Thread {
 			float timeTaken = (float) (totalLengthEnd - totalLengthStart);
 			
 			System.out.println("---Barman has served "+ drinksServed + " drinks in " + (timeTaken) + " milliseconds");
-			// patrons served per millisecond / 1000 => throughput per second
+			// patrons served per millisecond * 1000 => throughput per second
 			float throughput = (float) SchedulingSimulation.noPatrons / ((timeTaken) / 1000); // Perform division using floating-point arithmetic
 			System.out.println("---Barman serves "+ Float.toString(throughput) + " patrons per minute");
 			writeToFile(",,,,," + throughput); // Write drinks served per minute in 6th column

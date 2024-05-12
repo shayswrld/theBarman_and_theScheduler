@@ -1,0 +1,53 @@
+commit 85de7a80956e4c81c81caf0b89c128e978e445d9
+Author: Shaylin <shaylinvelen18@gmail.com>
+Date:   Sun May 12 11:37:25 2024 +0200
+
+    Complete, implementing RR'
+
+commit 8c0c3b6794f95c870805ffa3deae8bece2d0de76
+Author: Shaylin <shaylinvelen18@gmail.com>
+Date:   Thu May 9 02:12:26 2024 +0200
+
+    Complete pipeline with bargraph
+
+commit bf9d45da34d78d3ffe36abfae50db3a0aa6f153a
+Author: Shaylin <shaylinvelen18@gmail.com>
+Date:   Thu May 9 01:23:41 2024 +0200
+
+    Generating histograms
+
+commit 172e37b4541f04792be894902acde613487b213c
+Author: Shaylin <shaylinvelen18@gmail.com>
+Date:   Wed May 8 17:49:00 2024 +0200
+
+    Generating data
+
+commit 98e44fbc45d2a0e739e659a2c431c3351bfb172d
+Author: Shaylin <shaylinvelen18@gmail.com>
+Date:   Wed May 1 18:56:41 2024 +0200
+
+    Testing instrumentation and obtaining data
+
+commit f97663efe83658e887f582b02643828c8ee739b9
+Author: Shaylin <shaylinvelen18@gmail.com>
+Date:   Mon Apr 29 09:06:09 2024 +0200
+
+    Data collection on SJFS
+
+commit 74ac653f35889733846caa3114cc54512ef7e1a9
+Author: Shaylin <shaylinvelen18@gmail.com>
+Date:   Sun Apr 28 15:56:03 2024 +0200
+
+    Implemented non-preemptive SJFS
+
+commit fe353170c3eea670dad1de72301b28a9806f7843
+Author: Shaylin <shaylinvelen18@gmail.com>
+Date:   Sun Apr 28 07:11:58 2024 +0200
+
+    Begun implementing SJFS
+
+commit 734052558df08b8f94ada930bee12098e80b38f7
+Author: Shaylin <shaylinvelen18@gmail.com>
+Date:   Sun Apr 28 05:36:31 2024 +0200
+
+    Initialized version
