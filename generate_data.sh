@@ -5,12 +5,13 @@ make clean
 make
 
 # Run the program with varying parameters
-for n in {5..100..5}; 
+for n in {5..105..20}; 
 do
-  # Run only for FCFS
-  for j in 1
+  # Run the program 10 times for each parameter
+  for i in {1..10};
   do
-    make run ARGS="$n $j"
+    # Run for FCFS/SJF
+    make run ARGS="$n 0 $i"
   done
 done
 

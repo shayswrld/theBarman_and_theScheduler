@@ -27,6 +27,7 @@ public class Patron extends Thread {
 	private long orderEnd; //Store time when all orders have been made
 	private long responseTime; //Store the response time (time first drink recieved)
 	private long waitingTime; //Store the time taken that order was not worked on
+	private long orderTime;
 	
 	Patron( int ID,  CountDownLatch startSignal, Barman aBarman) {
 		this.ID=ID;
@@ -36,6 +37,7 @@ public class Patron extends Thread {
 		drinksOrder=new DrinkOrder[lengthOfOrder];
 		responseTime= Long.MAX_VALUE;
 		waitingTime = 0;
+		orderTime = 0;
 	}
 	
 	public void writeToFile(String data) throws IOException {
@@ -65,19 +67,22 @@ public class Patron extends Thread {
 			for(int i=0;i<lengthOfOrder;i++) {
 				System.out.println("Order placed by " + drinksOrder[i].toString());
 				theBarman.placeDrinkOrder(drinksOrder[i]);
+				orderTime += drinksOrder[i].getExecutionTime(); 
 			}
 			
 
 			for(int i=0;i<lengthOfOrder;i++) {
 				// Find order with lowest time taken to get response
-				long orderTime = drinksOrder[i].waitForOrder(startTime); // How long did this order take to complete
-				waitingTime += orderTime - drinksOrder[i].getExecutionTime(); // Waiting time is time bartender spends not working on drink 
+				drinksOrder[i].waitForOrder();
+				long orderTime = drinksOrder[i].getTimeDone() - startTime;
 				if (orderTime < responseTime) { 
+					
 					responseTime = orderTime; // Update response time - shortest time taken to get drink
 				}
 			}
 
 			long turnaroundTime = System.currentTimeMillis() - startTime; //Changed from totalTime -> turnaround time
+			long waitingTime = turnaroundTime - orderTime;
 			System.out.println(String.format("%d,%d,%d,%d,%d\n",ID,arrivalTime,turnaroundTime, responseTime, waitingTime));
 			writeToFile( String.format("%d,%d,%d,%d,%d,\n",ID,arrivalTime,turnaroundTime, responseTime, waitingTime)); //Write instrumentation
 			System.out.println("Patron "+ this.ID + " got order in " + turnaroundTime + "\n");

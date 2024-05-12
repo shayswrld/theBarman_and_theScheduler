@@ -51,6 +51,7 @@ public class DrinkOrder  {
     private static final Random random = new Random();
     private int orderer;
     private AtomicBoolean orderComplete;
+    private long timeDone;
 
  //constructor
     public DrinkOrder(int patron) {
@@ -70,21 +71,25 @@ public class DrinkOrder  {
     public int getExecutionTime() {
         return drink.getPreparationTime();
     }
+
+    public long getTimeDone() {
+        return this.timeDone;
+    }
     
     //barman signals when order is done
     public synchronized void orderDone() {
     	orderComplete.set(true);
         this.notifyAll();
+        timeDone = System.currentTimeMillis();
     }
     
     //patrons wait for their orders
     //returns time taken for the order
-    public synchronized long waitForOrder(long orderStart) throws InterruptedException {
+    public synchronized void waitForOrder() throws InterruptedException {
     	while(!orderComplete.get()) {
     		this.wait();
     	}
-        long timeToDrink = System.currentTimeMillis() - orderStart;
-        return timeToDrink; //Order completed - return time taken
+
     }
     
     @Override

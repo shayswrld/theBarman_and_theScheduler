@@ -71,7 +71,6 @@ public class Barman extends Thread {
 	public void run() {
 		try {
 			DrinkOrder nextOrder;
-			
 			startSignal.countDown(); //barman ready
 			startSignal.await(); //check latch - don't start until told to do so
 			totalLengthStart = System.currentTimeMillis();
@@ -92,8 +91,9 @@ public class Barman extends Thread {
 			System.out.println("---Barman is packing up ");
 			totalLengthEnd = System.currentTimeMillis();
 			float timeTaken = (float) (totalLengthEnd - totalLengthStart);
+			
 			System.out.println("---Barman has served "+ drinksServed + " drinks in " + (timeTaken) + " milliseconds");
-			// patrons served per millisecond * 1000 => throughput per second * 60 => throughput per minute
+			// patrons served per millisecond / 1000 => throughput per second
 			float throughput = (float) SchedulingSimulation.noPatrons / ((timeTaken) / 1000); // Perform division using floating-point arithmetic
 			System.out.println("---Barman serves "+ Float.toString(throughput) + " patrons per minute");
 			writeToFile(",,,,," + throughput); // Write drinks served per minute in 6th column
